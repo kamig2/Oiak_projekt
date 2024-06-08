@@ -8,16 +8,47 @@
 #include <vector>
 #include <random>
 
-std::vector<std::pair<int,int>> generateData(int size){
-    std::vector<std::pair<int,int>> matrix;
+#include <iostream>
+#include <vector>
+#include <random>
 
-    std::random_device r;
-    for(int i=0;i<size;i++){
-        std::default_random_engine e1(r());
-        std::uniform_int_distribution<int> uniformDist(0,1000);
-        matrix.push_back(std::make_pair(uniformDist(e1),uniformDist(e1)));
+using namespace std;
+
+class DataGenerator {
+    int numJobs;
+    int numMachines;
+
+public:
+    DataGenerator(int numJobs, int numMachines){
+        this->numJobs = numJobs;
+        this->numMachines = numMachines;
     }
-    return matrix;
-}
+
+    vector<vector<int>> generateRandomData(int minProcessingTime, int maxProcessingTime) {
+        vector<vector<int>> processingTimes(numJobs, vector<int>(numMachines));
+        random_device rd;
+        mt19937 gen(rd());
+        uniform_int_distribution<> dis(minProcessingTime, maxProcessingTime);
+        for (int i = 0; i < numJobs; ++i) {
+            for (int j = 0; j < numMachines; ++j) {
+                processingTimes[i][j] = dis(gen);
+            }
+        }
+        return processingTimes;
+    }
+};
+/*
+int () {
+    DataGenerator dg(20, 10);
+    vector<vector<int>> processingTimes = dg.generateRandomData(1, 100);
+    for (const auto& row : processingTimes) {
+        for (int time : row) {
+            cout << time << " ";
+        }
+        cout << endl;
+    }
+    return 0;
+}*/
+
 
 #endif //OIAK_PROJEKT_DATAGENERATOR_H
