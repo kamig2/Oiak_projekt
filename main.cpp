@@ -12,6 +12,49 @@ using namespace std;
 const int MIN_TIME = 1;
 const int MAX_TIME = 10;
 
+extern "C" void calculateMakespan(int* perm, int permSize,
+                       int** processingTimes, int numJobs,
+                       int numMachines, int* makespan);
+
+extern "C" int lowerBound(int* perm, int permSize,
+               int** processingTimes, int numJobs,
+               int numMachines);
+extern "C" void branchAndBound(int* perm, int permSize,
+                    int** processingTimes, int numJobs,
+                    int numMachines, int* bestMakespan,
+                    int* bestPerm, int* bestPermSize,
+                    int* currentPerm, int currentPermSize);
+
+// Wywolanie asemblera
+int main() {
+//    vector<vector<int>> processingTimes = { {2, 3, 2}, {4, 10, 3}, {3, 2, 4} };
+//    vector<int> result = nehAlgorithm(processingTimes);
+
+    int processingTimesArray[3][3] = { {2, 3, 2}, {4, 10, 3}, {3, 2, 4} };
+    int* processingTimes[3];
+    for (int i = 0; i < 3; ++i) {
+        processingTimes[i] = processingTimesArray[i];
+    }
+
+    int numJobs = 3;
+    int numMachines = 3;
+    int bestMakespan = 9999999;
+    int bestPerm[3];
+    int bestPermSize = 0;
+    int perm[3];
+    int currentPerm[3];
+
+    branchAndBound(perm, 0, processingTimes, numJobs, numMachines, &bestMakespan, bestPerm, &bestPermSize, currentPerm, 0);
+
+
+    printf("Best permutation: ");
+    for (int i = 0; i < bestPermSize; ++i) {
+        printf("%d ", bestPerm[i]);
+    }
+    printf("\nBest makespan: %d\n", bestMakespan);
+
+    return 0;
+}
 
 
 int test(int repNum, int code, int algorithmType, int numJobs, int numMachines, int minTime, int maxTime){
@@ -97,18 +140,7 @@ void menu(){
 
 }
 
-int main() {
-    vector<vector<int>> processingTimes = { {2, 3, 2}, {4, 10, 3}, {3, 2, 4} };
-    vector<int> result = nehAlgorithm(processingTimes);
 
-    cout << "Optimal order of tasks:\n";
-    for (int task : result) {
-        cout << task << " ";
-    }
-    cout << "\n";
-
-    return 0;
-}
 
 
 int main1() {

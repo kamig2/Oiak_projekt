@@ -19,7 +19,7 @@ class BbAlgorithm {
 public:
 
 // Funkcja obliczaj�ca czas przetwarzania dla danej permutacji
-    int calculateMakespan(const vector<int> &perm, const vector<vector<int>> &processingTimes) {
+    int calculateMakespan1(const vector<int> &perm, const vector<vector<int>> &processingTimes) {
         int numJobs = perm.size();
         int numMachines = processingTimes[0].size();
         vector<vector<int>> completionTimes(numJobs, vector<int>(numMachines, 0));
@@ -35,7 +35,7 @@ public:
     }
 
 // Oblicza doln� granic� dla aktualnej permutacji (na podstawie pozosta�ych zada�)
-    int lowerBound(const vector<int> &perm, const vector<vector<int>> &processingTimes, int numMachines) {
+    int lowerBound1(const vector<int> &perm, const vector<vector<int>> &processingTimes, int numMachines) {
         vector<bool> included(processingTimes.size(), false);
         for (int job: perm) included[job] = true;
 
@@ -53,10 +53,10 @@ public:
     }
 
 // Rekurencyjna funkcja branch and bound
-    void branchAndBound(vector<int> &perm, const vector<vector<int>> &processingTimes, int &bestMakespan,
+    void branchAndBound1(vector<int> &perm, const vector<vector<int>> &processingTimes, int &bestMakespan,
                         vector<int> &bestPerm, vector<int> &currentPerm) {
         if (currentPerm.size() == processingTimes.size()) {
-            int makespan = calculateMakespan(currentPerm, processingTimes);
+            int makespan = calculateMakespan1(currentPerm, processingTimes);
             if (makespan < bestMakespan) {
                 bestMakespan = makespan;
                 bestPerm = currentPerm;
@@ -65,10 +65,10 @@ public:
             for (int i = 0; i < processingTimes.size(); ++i) {
                 if (find(currentPerm.begin(), currentPerm.end(), i) == currentPerm.end()) {
                     currentPerm.push_back(i);
-                    int estimatedBound = calculateMakespan(currentPerm, processingTimes) +
-                                         lowerBound(currentPerm, processingTimes, processingTimes[0].size());
+                    int estimatedBound = calculateMakespan1(currentPerm, processingTimes) +
+                                         lowerBound1(currentPerm, processingTimes, processingTimes[0].size());
                     if (estimatedBound < bestMakespan) {
-                        branchAndBound(perm, processingTimes, bestMakespan, bestPerm, currentPerm);
+                        branchAndBound1(perm, processingTimes, bestMakespan, bestPerm, currentPerm);
                     }
                     currentPerm.pop_back();
                 }
@@ -81,7 +81,7 @@ public:
         vector<int> bestPerm;
         vector<int> perm;
         vector<int> currentPerm;
-        branchAndBound(perm, processingTimes, bestMakespan, bestPerm, currentPerm);
+        branchAndBound1(perm, processingTimes, bestMakespan, bestPerm, currentPerm);
 
         cout << "Best permutation: ";
         for (int i : bestPerm) cout << i << " ";
@@ -95,7 +95,7 @@ public:
         vector<int> bestPerm;
         vector<int> perm;
         vector<int> currentPerm;
-        branchAndBound(perm, processingTimes, bestMakespan, bestPerm, currentPerm);
+        branchAndBound1(perm, processingTimes, bestMakespan, bestPerm, currentPerm);
         timer.stop();
         return timer.timeperiod();
     }

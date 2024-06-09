@@ -3,4 +3,23 @@ project(oiak_projekt)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(oiak_projekt main.cpp NehAlgorithm.h DataGenerator.h Timer.h BbAlgorithm.h FileReader.h)
+enable_language(ASM)
+
+# Dodanie pliku asemblera do listy źródeł
+set(SOURCE_FILES
+        main.cpp
+        NehAlgorithm.h
+        DataGenerator.h
+        Timer.h
+        BbAlgorithm.h
+        FileReader.h
+        BBasembler.cpp
+        BBasembler.h
+        oiak_c_bb.s  # Dodaj plik asemblera
+)
+
+# Tworzenie wykonywalnego pliku
+add_executable(oiak_projekt ${SOURCE_FILES})
+
+# Specjalne opcje dla plików asemblera
+set_source_files_properties(oiak_c_bb.s PROPERTIES LANGUAGE ASM)
