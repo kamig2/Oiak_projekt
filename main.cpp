@@ -8,9 +8,23 @@
 #include "FileReader.h"
 #include "NehAlgorithm.h"
 
+#define MAX_JOBS 100
+#define MAX_MACHINES 100
+
 using namespace std;
 const int MIN_TIME = 1;
 const int MAX_TIME = 10;
+
+/* Do zrobienia:
+ * - ujednolicic dane wejsciowe
+ * - w branch and bound sprawdzic jak zadziajaja zakresy jak z neh
+ * - mozliwosc wyboru liczby zadan i maszyn
+ * - menu (wybor algorytmu, l zad i l masz
+ * - uporzadkowac kod - prostszy main
+ *          wyswietlenie czasu, permutacji + makespan(?))
+ * - sprawdzic algorytmy (wyniki)
+ * */
+
 
 extern "C" void calculateMakespan(int* perm, int permSize,
                        int** processingTimes, int numJobs,
@@ -25,12 +39,20 @@ extern "C" void branchAndBound(int* perm, int permSize,
                     int* bestPerm, int* bestPermSize,
                     int* currentPerm, int currentPermSize);
 
+extern "C" void neh_algorithm(int processingTimes[MAX_JOBS][MAX_MACHINES],
+                              int numJobs, int numMachines,
+                              int optimalOrder[MAX_JOBS]);
+
+
 // Wywolanie asemblera
 int main() {
-//    vector<vector<int>> processingTimes = { {2, 3, 2}, {4, 10, 3}, {3, 2, 4} };
-//    vector<int> result = nehAlgorithm(processingTimes);
+//    vector<vector<int>> processingTimes1 = { {2, 3, 2}, {4, 10, 3}, {3, 2, 4} };
+//    vector<int> result = nehAlgorithm(processingTimes1);
 
-    int processingTimesArray[3][3] = { {2, 3, 2}, {4, 10, 3}, {3, 2, 4} };
+    Timer timer;
+    uint64_t time = 0;
+    BbAlgorithm bbAlgorithm;
+    int processingTimesArray[3][3] = { {15, 3, 2}, {4, 10, 3}, {3, 2, 4} };
     int* processingTimes[3];
     for (int i = 0; i < 3; ++i) {
         processingTimes[i] = processingTimesArray[i];
@@ -44,14 +66,53 @@ int main() {
     int perm[3];
     int currentPerm[3];
 
+    timer.start();
     branchAndBound(perm, 0, processingTimes, numJobs, numMachines, &bestMakespan, bestPerm, &bestPermSize, currentPerm, 0);
+    timer.stop();
+    time = timer.timeperiod();
 
-
-    printf("Best permutation: ");
+    printf("Branch and bound\n");   // ujednolicic wyswietlanie
+    cout << "Czas asm: " << time;
+    printf("\nBest permutation: ");
     for (int i = 0; i < bestPermSize; ++i) {
         printf("%d ", bestPerm[i]);
     }
     printf("\nBest makespan: %d\n", bestMakespan);
+
+    /************************************************************/
+
+
+    int processingTimesNEH[MAX_JOBS][MAX_MACHINES] = {
+
+            {15, 3,  2},
+            {4, 10, 3},
+            {3, 2,  4}
+    };
+    int optimalOrder[MAX_JOBS];
+
+    cout << "Algorytm NEH: \n";
+
+    time = 0;
+    timer.start();
+    neh_algorithm(processingTimesNEH,numJobs,numMachines, optimalOrder );
+    timer.stop();
+    time = timer.timeperiod();
+    cout << "czas: " << time;
+    printf("\nOptimal job order: ");
+    for (int i = 0; i < numJobs; ++i) {
+        printf("%d ", optimalOrder[i] ); // +1 aby używać numeracji zadań od 1
+    }
+    printf("\n");
+
+    timer.start();
+    // bbAlgorithm.branchAndBound1(); tu trzeba bedzie dobrze parametry dodac
+    timer.stop();
+    time = timer.timeperiod();
+
+
+
+
+
 
     return 0;
 }

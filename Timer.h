@@ -23,7 +23,7 @@ public:
 
     uint64_t timeperiod() {
         duration <double> finalTime = t1 - t0;
-        return (uint64_t)(finalTime.count() * 1000);
+        return (uint64_t)(finalTime.count() * 1000000000); // chyba w nanosekundach
     }
 };
 
