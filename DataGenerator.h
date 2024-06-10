@@ -12,6 +12,9 @@
 #include <vector>
 #include <random>
 
+#define MAX_JOBS 100
+#define MAX_MACHINES 100
+
 using namespace std;
 
 class DataGenerator {
@@ -35,6 +38,18 @@ public:
             }
         }
         return processingTimes;
+    }
+
+    //nie wiem czy to zadziała a nie moge sprawdzić
+    void convertVectorToArray(const std::vector<std::vector<int>>& vec, int array[MAX_JOBS][MAX_MACHINES], int& numJobs, int& numMachines) {
+        numJobs = vec.size();
+        numMachines = vec[0].size();
+
+        for (int i = 0; i < numJobs; ++i) {
+            for (int j = 0; j < numMachines; ++j) {
+                array[i][j] = vec[i][j];
+            }
+        }
     }
 };
 /*

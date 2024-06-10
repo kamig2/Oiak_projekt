@@ -7,6 +7,7 @@
 #include "Timer.h"
 #include "FileReader.h"
 #include "NehAlgorithm.h"
+#include "Menu.h"
 
 #define MAX_JOBS 100
 #define MAX_MACHINES 100
@@ -43,9 +44,13 @@ extern "C" void neh_algorithm(int processingTimes[MAX_JOBS][MAX_MACHINES],
                               int numJobs, int numMachines,
                               int optimalOrder[MAX_JOBS]);
 
-
+int main(){
+    Menu menu;
+    menu.inputData();
+    return 0;
+}
 // Wywolanie asemblera
-int main() {
+int main2() {
 //    vector<vector<int>> processingTimes1 = { {2, 3, 2}, {4, 10, 3}, {3, 2, 4} };
 //    vector<int> result = nehAlgorithm(processingTimes1);
 
@@ -198,6 +203,7 @@ int test(int repNum, int code, int algorithmType, int numJobs, int numMachines, 
 
 // Menu progrmau jesli bedzie wersja konsolowa
 void menu(){
+
 
 }
 

@@ -17,7 +17,7 @@ set(SOURCE_FILES
         BBasembler.h
         oiak_c_bb.s  # Dodaj plik asemblera
         neh_assembler.s
-)
+        Menu.h)
 
 # Tworzenie wykonywalnego pliku
 add_executable(oiak_projekt ${SOURCE_FILES})
