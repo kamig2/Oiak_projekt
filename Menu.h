@@ -33,9 +33,11 @@ private:
         }
     }
 
-    void menu(int numJobs, int numMachines){
+    void menu5(int numJobs, int numMachines){
         DataGenerator generator(numJobs,numMachines);
         std::vector<std::vector<int>> processingTimesC = generator.generateRandomData(1,10);
+        processingTimesC = generator.loaddata("pliki testowe//ta001.txt");
+
         int processingTimesNeh[MAX_JOBS][MAX_MACHINES];
         int optimalOrder[MAX_JOBS];
 
@@ -93,7 +95,7 @@ private:
 
                     break;
                 case 3:
-                    bbAlgorithm.solve(processingTimesC);
+                    //bbAlgorithm.solve(processingTimesC);
 
                     break;
                 case 4:
@@ -119,7 +121,7 @@ public:
             std::cout<<"Podaj liczbe maszyn: "<<std::endl;
             int numMachines;
             std::cin>>numMachines;
-            menu(numJobs,numMachines);
+            //menu(numJobs,numMachines);
 
         }
     }

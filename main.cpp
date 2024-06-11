@@ -34,6 +34,7 @@ extern "C" void calculateMakespan(  int* perm, int permSize,
 extern "C" int lowerBound(  int* perm, int permSize,
                             int** processingTimes, int numJobs,
                             int numMachines);
+
 extern "C" void branchAndBound( int* perm, int permSize,
                                 int **processingTimes, int numJobs,
                                 int numMachines, int* bestMakespan,
@@ -44,7 +45,7 @@ extern "C" void neh_algorithm(int processingTimes[MAX_JOBS][MAX_MACHINES],
                               int numJobs, int numMachines,
                               int optimalOrder[MAX_JOBS]);
 
-int main(){
+int main3(){
     Menu menu;
     menu.inputData();
     return 0;
@@ -118,7 +119,7 @@ int main2() {
 
 
     timer.start();
-    bbAlgorithm.solve(processingTimesBB); //u trzeba bedzie dobrze parametry dodac
+   // bbAlgorithm.solve(processingTimesBB); //u trzeba bedzie dobrze parametry dodac
     timer.stop();
     time = timer.timeperiod();
 
@@ -208,38 +209,52 @@ int main2() {
 
 
 
-int main1() {
+int main() {
     int numJobs = 5;
     int numMachines = 5;
     int repNum = 5;
+    int makespan = 9999999;
 
+    DataGenerator generator(0,0);
+    std::vector<std::vector<int>> processingTimesC = generator.loaddata("pliki testowe//ta001.txt");
 
-    vector<vector<int>> dataSets = {
-            {10, 5},    {20, 10},   {20, 20},
-            {50, 5},    {50, 10},   {50,20},
-            {100, 5},   {100, 10},  {100, 20},
-            {200, 5},   {200,20},   {500,20}
-    };
-    for( int code = 0; code < 1; code++){
-        for(int algorithmType = 0; algorithmType < 1; algorithmType++) {
-            for (vector<int> tabs: dataSets) {
-//                test(repNum, code, algorithmType, tabs[0], tabs[1], MIN_TIME, MAX_TIME);
-            }
-        }
+    std::vector<int> optimalOrder = nehAlgorithm(processingTimesC);
+    makespan = calculateMakespan(processingTimesC, optimalOrder); //Calculate makespan z neh
+    std::cout << "Optimal job order: ";
+    for (int job: optimalOrder) {
+        std::cout << job << " ";
     }
+    std::cout << std::endl;
+    cout << "Total makespan: " << makespan;
+    cout << endl;
 
 
-    DataGenerator dataGenerator = DataGenerator(numJobs, numMachines);
-    BbAlgorithm bbAlgorithm = BbAlgorithm();
-    vector<vector<int>> processingTimes = dataGenerator.generateRandomData(MIN_TIME, MAX_TIME);
-    cout << "Czasy przetwarzania: " << endl;
-    cout << "---------------------" << endl;
-    for(int i = 0; i < numJobs; i++){
-        for(int j = 0; j < numMachines; j++){
-            cout << processingTimes[i][j] << " ";
-        }
-        cout << endl;
-    }
-    bbAlgorithm.solve(processingTimes);
+//    vector<vector<int>> dataSets = {
+//            {10, 5},    {20, 10},   {20, 20},
+//            {50, 5},    {50, 10},   {50,20},
+//            {100, 5},   {100, 10},  {100, 20},
+//            {200, 5},   {200,20},   {500,20}
+//    };
+//    for( int code = 0; code < 1; code++){
+//        for(int algorithmType = 0; algorithmType < 1; algorithmType++) {
+//            for (vector<int> tabs: dataSets) {
+////                test(repNum, code, algorithmType, tabs[0], tabs[1], MIN_TIME, MAX_TIME);
+//            }
+//        }
+//    }
+
+
+//    DataGenerator dataGenerator = DataGenerator(numJobs, numMachines);
+//    BbAlgorithm bbAlgorithm = BbAlgorithm();
+//    vector<vector<int>> processingTimes = dataGenerator.generateRandomData(MIN_TIME, MAX_TIME);
+//    cout << "Czasy przetwarzania: " << endl;
+//    cout << "---------------------" << endl;
+//    for(int i = 0; i < numJobs; i++){
+//        for(int j = 0; j < numMachines; j++){
+//            cout << processingTimes[i][j] << " ";
+//        }
+//        cout << endl;
+//    }
+  //  bbAlgorithm.solve(processingTimes);
     return 0;
 }

@@ -5,12 +5,11 @@
 #ifndef OIAK_PROJEKT_DATAGENERATOR_H
 #define OIAK_PROJEKT_DATAGENERATOR_H
 
-#include <vector>
-#include <random>
-
 #include <iostream>
 #include <vector>
 #include <random>
+#include <fstream>
+#include <sstream>
 
 #define MAX_JOBS 100
 #define MAX_MACHINES 100
@@ -38,6 +37,39 @@ public:
             }
         }
         return processingTimes;
+    }
+    std::vector<std::vector<int>> loaddata(std::string filename){
+        std::vector<std::vector<int>> data;
+        std::ifstream file(filename);
+        if (!file.is_open()) {
+            std::cerr << "Nie można otworzyć pliku do odczytu!" << std::endl;
+            return data;
+        }
+        std::string line;
+        std::string size;
+        std::getline(file, size);
+        std::istringstream sizess(size);
+        int machines = 0;
+        int jobs = 0;
+        sizess>>jobs;
+        sizess>>machines;
+
+        data.resize(jobs, std::vector<int>(machines));
+        int iter = 0;
+        while (std::getline(file, line)) {
+            std::istringstream iss(line);
+            std::vector<int> tokens;
+            int token;
+            while (iss >> token) {
+                tokens.push_back(token);
+            }
+            for (int i = 0; i < tokens.size(); i++) {
+                data[iter][i] = tokens[i];
+            }
+            iter++;
+        }
+        file.close();
+        return data;
     }
 
     //nie wiem czy to zadziała a nie moge sprawdzić
