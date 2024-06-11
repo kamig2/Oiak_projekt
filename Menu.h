@@ -112,13 +112,16 @@ private:
     }
 public:
     void inputData(){
-        std::cout<<"Podaj liczbe zadan: "<<std::endl;
-        int numJobs;
-        std::cin>>numJobs;
-        std::cout<<"Podaj liczbe maszyn: "<<std::endl;
-        int numMachines;
-        std::cin>>numMachines;
-        menu(numJobs,numMachines);
+        while(true){
+            std::cout<<"Podaj liczbe zadan: "<<std::endl;
+            int numJobs;
+            std::cin>>numJobs;
+            std::cout<<"Podaj liczbe maszyn: "<<std::endl;
+            int numMachines;
+            std::cin>>numMachines;
+            menu(numJobs,numMachines);
+
+        }
     }
 };
 #endif //OIAK_PROJEKT_MENU_H
