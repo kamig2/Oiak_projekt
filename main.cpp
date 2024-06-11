@@ -9,7 +9,7 @@
 #include "NehAlgorithm.h"
 #include "Menu.h"
 
-#define MAX_JOBS 100
+#define MAX_JOBS 500
 #define MAX_MACHINES 100
 
 using namespace std;
@@ -27,18 +27,18 @@ const int MAX_TIME = 10;
  * */
 
 
-extern "C" void calculateMakespan(int* perm, int permSize,
-                       int** processingTimes, int numJobs,
-                       int numMachines, int* makespan);
+extern "C" void calculateMakespan(  int* perm, int permSize,
+                                    int** processingTimes, int numJobs,
+                                    int numMachines, int* makespan);
 
-extern "C" int lowerBound(int* perm, int permSize,
-               int** processingTimes, int numJobs,
-               int numMachines);
-extern "C" void branchAndBound(int* perm, int permSize,
-                    int** processingTimes, int numJobs,
-                    int numMachines, int* bestMakespan,
-                    int* bestPerm, int* bestPermSize,
-                    int* currentPerm, int currentPermSize);
+extern "C" int lowerBound(  int* perm, int permSize,
+                            int** processingTimes, int numJobs,
+                            int numMachines);
+extern "C" void branchAndBound( int* perm, int permSize,
+                                int **processingTimes, int numJobs,
+                                int numMachines, int* bestMakespan,
+                                int* bestPerm, int* bestPermSize,
+                                int* currentPerm, int currentPermSize);
 
 extern "C" void neh_algorithm(int processingTimes[MAX_JOBS][MAX_MACHINES],
                               int numJobs, int numMachines,
@@ -72,7 +72,7 @@ int main2() {
     int currentPerm[3];
 
     timer.start();
-    branchAndBound(perm, 0, processingTimes, numJobs, numMachines, &bestMakespan, bestPerm, &bestPermSize, currentPerm, 0);
+    //branchAndBound(perm, 0, processingTimes, numJobs, numMachines, &bestMakespan, bestPerm, &bestPermSize, currentPerm, 0);
     timer.stop();
     time = timer.timeperiod();
 
@@ -109,8 +109,16 @@ int main2() {
     }
     printf("\n");
 
+
+    vector<vector<int>> processingTimesBB = {
+            {15, 3,  2},
+            {4, 10, 3},
+            {3, 2,  4}
+    };
+
+
     timer.start();
-    // bbAlgorithm.branchAndBound1(); tu trzeba bedzie dobrze parametry dodac
+    bbAlgorithm.solve(processingTimesBB); //u trzeba bedzie dobrze parametry dodac
     timer.stop();
     time = timer.timeperiod();
 

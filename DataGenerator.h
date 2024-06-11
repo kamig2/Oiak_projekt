@@ -51,7 +51,25 @@ public:
             }
         }
     }
+
+    int** convertToPointer(const vector<vector<int>>& data) {
+        int** arrayPointer = new int*[numJobs];
+        for (int i = 0; i < numJobs; ++i) {
+            arrayPointer[i] = new int[numMachines];
+            for (int j = 0; j < numMachines; ++j) {
+                arrayPointer[i][j] = data[i][j];
+            }
+        }
+        return arrayPointer;
+    }
+
+    void freePointer(int** arrayPointer) {
+        for (int i = 0; i < numJobs; ++i) {
+            delete[] arrayPointer[i];
+        }
+    }
 };
+
 /*
 int () {
     DataGenerator dg(20, 10);
