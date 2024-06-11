@@ -123,15 +123,11 @@ int main2() {
     time = timer.timeperiod();
 
 
-
-
-
-
     return 0;
 }
 
 
-int test(int repNum, int code, int algorithmType, int numJobs, int numMachines, int minTime, int maxTime){
+/*int test(int repNum, int code, int algorithmType, int numJobs, int numMachines, int minTime, int maxTime){
     Timer timer;
     DataGenerator dataGenerator = DataGenerator(numJobs, numMachines);
 
@@ -206,14 +202,8 @@ int test(int repNum, int code, int algorithmType, int numJobs, int numMachines, 
     bbAlgorithm.solve(processingTimes);
     timer.stop();
     return timer.timeperiod();
-}
+}*/
 
-
-// Menu progrmau jesli bedzie wersja konsolowa
-void menu(){
-
-
-}
 
 
 
@@ -233,7 +223,7 @@ int main1() {
     for( int code = 0; code < 1; code++){
         for(int algorithmType = 0; algorithmType < 1; algorithmType++) {
             for (vector<int> tabs: dataSets) {
-                test(repNum, code, algorithmType, tabs[0], tabs[1], MIN_TIME, MAX_TIME);
+//                test(repNum, code, algorithmType, tabs[0], tabs[1], MIN_TIME, MAX_TIME);
             }
         }
     }

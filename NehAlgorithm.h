@@ -8,6 +8,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include "Timer.h"
 
 // Struktura do przechowywania zadań wraz z ich całkowitym czasem przetwarzania
 struct Task {
@@ -89,6 +90,15 @@ std::vector<int> nehAlgorithm(const std::vector<std::vector<int>>& processingTim
     }
 
     return jobOrder; // Zwracanie optymalnego porządku zadań
+}
+
+uint64_t neh_time(const vector<vector<int>> &processingTimes){
+    Timer timer;
+    timer.start();
+    nehAlgorithm(processingTimes);
+    timer.stop();
+    return timer.timeperiod();
+
 }
 
 
