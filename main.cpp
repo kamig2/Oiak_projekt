@@ -8,13 +8,16 @@
 #include "FileReader.h"
 #include "NehAlgorithm.h"
 #include "Menu.h"
+#include "Test.h"
 
 #define MAX_JOBS 500
 #define MAX_MACHINES 100
 
 using namespace std;
+/*
 const int MIN_TIME = 1;
 const int MAX_TIME = 10;
+*/
 
 /* Do zrobienia:
  * - ujednolicic dane wejsciowe
@@ -45,6 +48,10 @@ extern "C" void neh_algorithm(int processingTimes[MAX_JOBS][MAX_MACHINES],
                               int numJobs, int numMachines,
                               int optimalOrder[MAX_JOBS]);
 
+
+int main(){
+    interatingThroughtFiles();
+}
 int main3(){
     Menu menu;
     menu.inputData();
@@ -209,7 +216,7 @@ int main2() {
 
 
 
-int main() {
+int main1() {
     int numJobs = 5;
     int numMachines = 5;
     int repNum = 5;

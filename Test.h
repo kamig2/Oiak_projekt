@@ -26,16 +26,22 @@ extern "C" void branchAndBound( int* perm, int permSize,
                                 int* bestPerm, int* bestPermSize,
                                 int* currentPerm, int currentPermSize);
 
-    int test(int repNum, int code, int algorithmType, int numJobs, int numMachines,string fileName/*, int minTime, int maxTime*/){
+
+    int test(int repNum, int code, int algorithmType/*, int numJobs, int numMachines,*/,string fileName/*, int minTime, int maxTime*/){
+        int numMachines,numJobs;
         Timer timer;
-//        DataGenerator dataGenerator = DataGenerator(numJobs, numMachines);
+        DataGenerator generator = DataGenerator(numJobs, numMachines);
 
         uint64_t time = 0;
         float totalTime = 0;
 
         FileReader fileReader;
         BbAlgorithm bbAlgorithm = BbAlgorithm();
-        vector<vector<int>> processingTimes = fileReader.loadFromFile(fileName);
+//        vector<vector<int>> processingTimesC = fileReader.loadFromFile(fileName);
+        vector<vector<int>> processingTimesC = generator.loaddata(fileName,numJobs,numMachines);
+        int processingTimesNeh[MAX_JOBS][MAX_MACHINES];
+        int optimalOrder[MAX_JOBS];
+        generator.convertVectorToArray(processingTimesC, processingTimesNeh, numJobs, numMachines);
 
         string doPliku;
         string nazwaPliku;
@@ -64,18 +70,25 @@ extern "C" void branchAndBound( int* perm, int permSize,
 
         for(int i = 0; i < repNum; i++){
             cout << numJobs<<","<<numMachines<<":";
-            // time  = bbAlgorithm.bb_time(processingTimes);
+            // time  = bbAlgorithm.bb_time(processingTimesC);
             if(code == 0) {
                 if(algorithmType == 0){
-                    time  += bbAlgorithm.bb_time(processingTimes);
+                    time  += bbAlgorithm.bb_time(processingTimesC);
                     cout << time << endl;
                 }
                 else {
-                    time += neh_time(processingTimes);
+                    time += neh_time(processingTimesC);
                 }
             }else if(code == 1){
                 if(algorithmType== 0){
                     // to samo dla ASM
+                }else{
+                    Timer timer;
+                    timer.start();
+                    neh_algorithm(processingTimesNeh,numJobs,numMachines,optimalOrder);
+                    timer.stop();
+                    time += timer.timeperiod();
+
                 }
             }
         }
@@ -96,21 +109,32 @@ extern "C" void branchAndBound( int* perm, int permSize,
         cout << "---------------------" << endl;
         for(int i = 0; i < numJobs; i++){
             for(int j = 0; j < numMachines; j++){
-                cout << processingTimes[i][j] << " ";
+                cout << processingTimesC[i][j] << " ";
             }
             cout << endl;
         }*/
-        timer.start();
-        bbAlgorithm.solve(processingTimes);
-        timer.stop();
-        return timer.timeperiod();
+        /*timer.start();
+        bbAlgorithm.solve(processingTimesC);
+        timer.stop();*/
+        return timer.timeperiod();//czy ta funkcja musi coś zwracac czy możę być void?
     }
 
-    void interatingThroughtFiles(){
-        //dodać pętle iterującą po nazwach plików z danymi
+    void interatingThroughtFiles() {
+        std::string fileName;
+        for (int i = 1; i <= 90; i++) {
+            if (i < 10) {
+                fileName = "pliki testowe//ta00" + to_string(i) + ".txt";
+            } else {
+                fileName = "pliki testowe//ta0" + to_string(i) + ".txt";
+            }
+            for (int code = 0; code < 2; code++) {
+                for (int algorithmType = 1; algorithmType < 2; algorithmType++) {//wywołanie testów tylko dla neh
+                    test(10,code,algorithmType,fileName);
+
+                }
+            }
+
+
+        }
     }
-
-
-
-
 #endif //OIAK_PROJEKT_TEST_H

@@ -95,11 +95,11 @@ private:
 
                     break;
                 case 3:
-                    //bbAlgorithm.solve(processingTimesC);
+//                    bbAlgorithm.solve(processingTimesC);
 
                     break;
                 case 4:
-                   // branchAndBound(perm, 0, processingTimesNeh, numJobs, numMachines, &bestMakespan, bestPerm, &bestPermSize, currentPerm, 0);
+//                    branchAndBound(perm, 0, processingTimesNeh, numJobs, numMachines, &bestMakespan, bestPerm, &bestPermSize, currentPerm, 0);
                     cout << "Best permutation: ";
                     for (int i : bestPerm) cout << i << " ";
                     cout << "\nBest makespan: " << bestMakespan << endl;

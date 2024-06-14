@@ -72,6 +72,39 @@ public:
         return data;
     }
 
+    //metoda bedzie zapisywac też ilość maszyn i zadań co jest potrzebne do wywołania funkcji assemblerowej
+    std::vector<std::vector<int>> loaddata(const std::string& filename, int& numJobs, int& numMachines) {
+        std::vector<std::vector<int>> data;
+        std::ifstream file(filename);
+        if (!file.is_open()) {
+            std::cerr << "Nie można otworzyć pliku do odczytu!" << std::endl;
+            return data;
+        }
+        std::string line;
+        std::string size;
+        std::getline(file, size);
+        std::istringstream sizess(size);
+        sizess >> numJobs >> numMachines;
+
+        data.resize(numJobs, std::vector<int>(numMachines));
+        int iter = 0;
+        while (std::getline(file, line)) {
+            std::istringstream iss(line);
+            std::vector<int> tokens;
+            int token;
+            while (iss >> token) {
+                tokens.push_back(token);
+            }
+            for (int i = 0; i < tokens.size(); i++) {
+                data[iter][i] = tokens[i];
+            }
+            iter++;
+        }
+        file.close();
+        return data;
+    }
+
+
     //nie wiem czy to zadziała a nie moge sprawdzić
     void convertVectorToArray(const std::vector<std::vector<int>>& vec, int array[MAX_JOBS][MAX_MACHINES], int& numJobs, int& numMachines) {
         numJobs = vec.size();
