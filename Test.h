@@ -36,7 +36,7 @@ extern "C" void branchAndBound( int* perm, int permSize,
 
 
 
-int test(int repNum, int code, int algorithmType/*, int numJobs, int numMachines,*/,string fileName,/*, int minTime, int maxTime*/int i){
+int test(int repNum, int code, int algorithmType,string fileName,int i){
     int numMachines,numJobs;
     Timer timer;
     DataGenerator generator = DataGenerator(numJobs, numMachines);
@@ -46,7 +46,6 @@ int test(int repNum, int code, int algorithmType/*, int numJobs, int numMachines
 
     FileReader fileReader;
     BbAlgorithm bbAlgorithm = BbAlgorithm();
-//        vector<vector<int>> processingTimesC = fileReader.loadFromFile(fileName);
     vector<vector<int>> processingTimesC = generator.loaddata(fileName,numJobs,numMachines);
     int processingTimesNeh[MAX_JOBS][MAX_MACHINES];
     int optimalOrder[MAX_JOBS];
@@ -120,19 +119,6 @@ int test(int repNum, int code, int algorithmType/*, int numJobs, int numMachines
     fileReader.saveFile(nazwaPliku, doPliku);
 
 
-
-
-    /*cout << "Czasy przetwarzania: " << endl;
-    cout << "---------------------" << endl;
-    for(int i = 0; i < numJobs; i++){
-        for(int j = 0; j < numMachines; j++){
-            cout << processingTimesC[i][j] << " ";
-        }
-        cout << endl;
-    }*/
-    /*timer.start();
-    bbAlgorithm.solve(processingTimesC);
-    timer.stop();*/
     return timer.timeperiod();//czy ta funkcja musi coś zwracac czy możę być void?
 }
 

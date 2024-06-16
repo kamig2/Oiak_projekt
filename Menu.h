@@ -33,7 +33,7 @@ private:
         }
     }
 
-    void menu5(int numJobs, int numMachines){
+    void menu(int numJobs, int numMachines){
         DataGenerator generator(numJobs,numMachines);
         std::vector<std::vector<int>> processingTimesC = generator.generateRandomData(1,10);
         processingTimesC = generator.loaddata("pliki testowe//ta001.txt");
@@ -79,8 +79,6 @@ private:
                     cout << "Total makespan: " << makespan;
                     cout << endl;
 
-
-
                     break;
                 }
                 case 2:
@@ -94,12 +92,17 @@ private:
                     cout << endl;
 
                     break;
-                case 3:
-//                    bbAlgorithm.solve(processingTimesC);
-
+                case 3: {
+                    vector<vector<int>> result = bbAlgorithm.branchAndBound1(processingTimesC);
+                    cout << "Najlepsza permutacja: ";
+                    for (int job: result[0]) {
+                        cout << job << " ";
+                    }
+                    cout << "\nBest makespan: " << result[1][0] << endl;
+                }
                     break;
                 case 4:
-//                    branchAndBound(perm, 0, processingTimesNeh, numJobs, numMachines, &bestMakespan, bestPerm, &bestPermSize, currentPerm, 0);
+                    branchAndBound(perm, 0, processingTimesPOinter, numJobs, numMachines, &bestMakespan, bestPerm, &bestPermSize, currentPerm, 0);
                     cout << "Best permutation: ";
                     for (int i : bestPerm) cout << i << " ";
                     cout << "\nBest makespan: " << bestMakespan << endl;
@@ -121,7 +124,7 @@ public:
             std::cout<<"Podaj liczbe maszyn: "<<std::endl;
             int numMachines;
             std::cin>>numMachines;
-            //menu(numJobs,numMachines);
+            menu(numJobs, numMachines);
 
         }
     }

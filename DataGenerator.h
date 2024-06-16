@@ -136,18 +136,7 @@ public:
     }
 };
 
-/*
-int () {
-    DataGenerator dg(20, 10);
-    vector<vector<int>> processingTimes = dg.generateRandomData(1, 100);
-    for (const auto& row : processingTimes) {
-        for (int time : row) {
-            cout << time << " ";
-        }
-        cout << endl;
-    }
-    return 0;
-}*/
+
 
 
 #endif //OIAK_PROJEKT_DATAGENERATOR_H

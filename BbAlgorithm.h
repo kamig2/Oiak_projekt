@@ -94,23 +94,6 @@ vector<vector<int>> BbAlgorithm::branchAndBound1(const vector<vector<int>> &proc
     return {bestSolution, {bestCost}};
 }
 
-int main4() {
-    vector<vector<int>> processingTimes = {
-            {2, 3, 4},
-            {3, 2, 1},
-            {4, 3, 2}
-    };
-
-    BbAlgorithm algorithm;
-    vector<vector<int>> result = algorithm.branchAndBound1(processingTimes);
-    cout << "Najlepsza permutacja: ";
-    for (int job : result[0]) {
-        cout << job << " ";
-    }
-    cout << "\nMinimalny makespan: " << result[1][0] << endl;
-
-    return 0;
-}
 
 
 
