@@ -8,7 +8,14 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <sys/resource.h>
 #include "Timer.h"
+
+long getMemoryUsage() {
+    struct rusage usage{};
+    getrusage(RUSAGE_SELF, &usage);
+    return usage.ru_maxrss; // in kilobytes
+}
 
 // Struktura do przechowywania zadań wraz z ich całkowitym czasem przetwarzania
 struct Task {
@@ -88,7 +95,6 @@ std::vector<int> nehAlgorithm(const std::vector<std::vector<int>>& processingTim
 
         jobOrder.insert(jobOrder.begin() + bestPosition, task.id); // Wstawienie zadania na optymalną pozycję
     }
-
     return jobOrder; // Zwracanie optymalnego porządku zadań
 }
 

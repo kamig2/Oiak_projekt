@@ -10,6 +10,7 @@
 #include <climits>
 #include <cstdint>
 #include <chrono>
+#include <queue>
 #include "Timer.h"
 
 using namespace std;
@@ -17,89 +18,104 @@ using namespace std;
 class BbAlgorithm {
 
 public:
+    vector<vector<int>> branchAndBound1(const vector<vector<int>> &processingTimes);
 
-// Funkcja obliczaj�ca czas przetwarzania dla danej permutacji
-    int calculateMakespan1(const vector<int> &perm, const vector<vector<int>> &processingTimes) {
-        int numJobs = perm.size();
-        int numMachines = processingTimes[0].size();
-        vector<vector<int>> completionTimes(numJobs, vector<int>(numMachines, 0));
+private:
+    struct Node {
+        vector<int> permutation;
+        int lower_bound;
+        int level;
+    };
 
-        for (int i = 0; i < numJobs; ++i) {
-            for (int j = 0; j < numMachines; ++j) {
-                int timeJobStarts = (j == 0) ? 0 : completionTimes[i][j - 1];
-                int timeMachineIsFree = (i == 0) ? 0 : completionTimes[i - 1][j];
-                completionTimes[i][j] = max(timeJobStarts, timeMachineIsFree) + processingTimes[perm[i]][j];
-            }
+    struct Compare {
+        bool operator()(const Node &a, const Node &b) {
+            return a.lower_bound > b.lower_bound;
         }
-        return completionTimes[numJobs - 1][numMachines - 1]; // czas calkowity
+    };
+
+    int calculateMakespan(const vector<int> &permutation, const vector<vector<int>> &processingTimes);
+    int calculateLowerBound(const vector<int> &permutation, const vector<vector<int>> &processingTimes);
+};
+
+int BbAlgorithm::calculateMakespan(const vector<int> &permutation, const vector<vector<int>> &processingTimes) {
+    int numJobs = permutation.size();
+    int numMachines = processingTimes[0].size();
+    vector<vector<int>> completionTimes(numJobs + 1, vector<int>(numMachines + 1, 0));
+
+    for (int i = 1; i <= numJobs; ++i) {
+        for (int j = 1; j <= numMachines; ++j) {
+            completionTimes[i][j] = max(completionTimes[i - 1][j], completionTimes[i][j - 1]) +
+                                    processingTimes[permutation[i - 1]][j - 1];
+        }
     }
 
-// Oblicza doln� granic� dla aktualnej permutacji (na podstawie pozosta�ych zada�)
-    int lowerBound1(const vector<int> &perm, const vector<vector<int>> &processingTimes, int numMachines) {
-        vector<bool> included(processingTimes.size(), false);
-        for (int job: perm) included[job] = true;
+    return completionTimes[numJobs][numMachines];
+}
 
-        int lb = 0;
-        for (int i = 0; i < included.size(); ++i) {
-            if (!included[i]) {
-                int minTime = INT_MAX;
-                for (int j = 0; j < numMachines; ++j) {
-                    minTime = min(minTime, processingTimes[i][j]);
-                }
-                lb += minTime;
-            }
-        }
-        return lb;
-    }
+int BbAlgorithm::calculateLowerBound(const vector<int> &permutation, const vector<vector<int>> &processingTimes) {
+    return calculateMakespan(permutation, processingTimes);
+}
 
-// Rekurencyjna funkcja branch and bound
-    void branchAndBound1(vector<int> &perm, const vector<vector<int>> &processingTimes, int &bestMakespan,
-                        vector<int> &bestPerm, vector<int> &currentPerm) {
-        if (currentPerm.size() == processingTimes.size()) {
-            int makespan = calculateMakespan1(currentPerm, processingTimes);
-            if (makespan < bestMakespan) {
-                bestMakespan = makespan;
-                bestPerm = currentPerm;
+vector<vector<int>> BbAlgorithm::branchAndBound1(const vector<vector<int>> &processingTimes) {
+    int numJobs = processingTimes.size();
+    vector<int> bestSolution;
+    int bestCost = INT_MAX;
+
+    priority_queue<Node, vector<Node>, Compare> pq;
+    Node initialNode = {{}, 0, 0};
+    pq.push(initialNode);
+
+    while (!pq.empty()) {
+        Node node = pq.top();
+        pq.pop();
+
+        if (node.level == numJobs) {
+            int makespan = calculateMakespan(node.permutation, processingTimes);
+            if (makespan < bestCost) {
+                bestCost = makespan;
+                bestSolution = node.permutation;
             }
         } else {
-            for (int i = 0; i < processingTimes.size(); ++i) {
-                if (find(currentPerm.begin(), currentPerm.end(), i) == currentPerm.end()) {
-                    currentPerm.push_back(i);
-                    int estimatedBound = calculateMakespan1(currentPerm, processingTimes) +
-                                         lowerBound1(currentPerm, processingTimes, processingTimes[0].size());
-                    if (estimatedBound < bestMakespan) {
-                        branchAndBound1(perm, processingTimes, bestMakespan, bestPerm, currentPerm);
+            for (int i = 0; i < numJobs; ++i) {
+                if (find(node.permutation.begin(), node.permutation.end(), i) == node.permutation.end()) {
+                    Node child;
+                    child.permutation = node.permutation;
+                    child.permutation.push_back(i);
+                    child.level = node.level + 1;
+                    child.lower_bound = calculateLowerBound(child.permutation, processingTimes);
+                    if (child.lower_bound < bestCost) {
+                        pq.push(child);
                     }
-                    currentPerm.pop_back();
                 }
             }
         }
     }
 
-    void solve(const vector<vector<int>> &processingTimes) {
-        int bestMakespan = INT_MAX;
-        vector<int> bestPerm;
-        vector<int> perm;
-        vector<int> currentPerm;
-        branchAndBound1(perm, processingTimes, bestMakespan, bestPerm, currentPerm);
+    return {bestSolution, {bestCost}};
+}
 
-        cout << "Best permutation: ";
-        for (int i : bestPerm) cout << i << " ";
-        cout << "\nBest makespan: " << bestMakespan << endl;
+int main4() {
+    vector<vector<int>> processingTimes = {
+            {2, 3, 4},
+            {3, 2, 1},
+            {4, 3, 2}
+    };
+
+    BbAlgorithm algorithm;
+    vector<vector<int>> result = algorithm.branchAndBound1(processingTimes);
+    cout << "Najlepsza permutacja: ";
+    for (int job : result[0]) {
+        cout << job << " ";
     }
+    cout << "\nMinimalny makespan: " << result[1][0] << endl;
 
-    uint64_t bb_time (const vector<vector<int>> &processingTimes) {
-        Timer timer;
-        timer.start();
-        int bestMakespan = INT_MAX;
-        vector<int> bestPerm;
-        vector<int> perm;
-        vector<int> currentPerm;
-        branchAndBound1(perm, processingTimes, bestMakespan, bestPerm, currentPerm);
-        timer.stop();
-        return timer.timeperiod();
-    }
+    return 0;
+}
 
-};
+
+
+
+
+
 
 #endif //OIAK_PROJEKT_BBALGORITHM_H

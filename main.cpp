@@ -52,7 +52,9 @@ extern "C" void neh_algorithm(int processingTimes[MAX_JOBS][MAX_MACHINES],
 int main(){
     interatingThroughtFiles();
 }
-int main3(){
+
+
+int main9(){
     Menu menu;
     menu.inputData();
     return 0;

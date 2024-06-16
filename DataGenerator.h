@@ -39,6 +39,7 @@ public:
         return processingTimes;
     }
     std::vector<std::vector<int>> loaddata(std::string filename){
+        std::cout<<filename<<std::endl;
         std::vector<std::vector<int>> data;
         std::ifstream file(filename);
         if (!file.is_open()) {
@@ -72,7 +73,7 @@ public:
         return data;
     }
 
-    //metoda bedzie zapisywac też ilość maszyn i zadań co jest potrzebne do wywołania funkcji assemblerowej
+    //metoda bedzie zapisywac też liczbe maszyn i zadań co jest potrzebne do wywołania funkcji assemblerowej
     std::vector<std::vector<int>> loaddata(const std::string& filename, int& numJobs, int& numMachines) {
         std::vector<std::vector<int>> data;
         std::ifstream file(filename);

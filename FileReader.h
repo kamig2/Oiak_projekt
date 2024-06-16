@@ -81,7 +81,6 @@ public:
         plik << zawartosc; // Zapisanie zawartosci do pliku
         plik.close(); // Zamknięcie pliku
 
-        cout << "Zawartosc zostala zapisana do pliku." << endl;
 
         return 0;
     }
@@ -107,6 +106,7 @@ public:
 
         return 0;
     }
+
 };
 
 /*int mainf() {
