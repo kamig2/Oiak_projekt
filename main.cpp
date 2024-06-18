@@ -15,13 +15,6 @@
 
 using namespace std;
 
-/* Do zrobienia:
- * - w branch and bound sprawdzic jak zadziajaja zakresy jak z neh
- *          wyswietlenie czasu, permutacji + makespan(?))
- * - sprawdzic algorytmy (wyniki)
- * */
-
-
 extern "C" void calculateMakespan(  int* perm, int permSize,
                                     int** processingTimes, int numJobs,
                                     int numMachines, int* makespan);

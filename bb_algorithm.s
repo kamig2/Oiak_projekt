@@ -1,4 +1,4 @@
-	.file	"oiak_c_bb.c"
+
 	.text
 	.globl	calculateMakespan
 	.type	calculateMakespan, @function

@@ -13,8 +13,6 @@ set(SOURCE_FILES
         Timer.h
         BbAlgorithm.h
         FileReader.h
-        BBasembler.cpp
-        BBasembler.h
         bb_algorithm.s  # Dodaj plik asemblera
         neh_assembler.s
         Menu.h Test.h)

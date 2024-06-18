@@ -33,11 +33,11 @@ private:
         }
     };
 
-    int calculateMakespan(const vector<int> &permutation, const vector<vector<int>> &processingTimes);
+    int calculateMakespan1(const vector<int> &permutation, const vector<vector<int>> &processingTimes);
     int calculateLowerBound(const vector<int> &permutation, const vector<vector<int>> &processingTimes);
 };
 
-int BbAlgorithm::calculateMakespan(const vector<int> &permutation, const vector<vector<int>> &processingTimes) {
+int BbAlgorithm::calculateMakespan1(const vector<int> &permutation, const vector<vector<int>> &processingTimes) {
     int numJobs = permutation.size();
     int numMachines = processingTimes[0].size();
     vector<vector<int>> completionTimes(numJobs + 1, vector<int>(numMachines + 1, 0));
@@ -53,7 +53,7 @@ int BbAlgorithm::calculateMakespan(const vector<int> &permutation, const vector<
 }
 
 int BbAlgorithm::calculateLowerBound(const vector<int> &permutation, const vector<vector<int>> &processingTimes) {
-    return calculateMakespan(permutation, processingTimes);
+    return calculateMakespan1(permutation, processingTimes);
 }
 
 vector<vector<int>> BbAlgorithm::branchAndBound1(const vector<vector<int>> &processingTimes) {
@@ -70,7 +70,7 @@ vector<vector<int>> BbAlgorithm::branchAndBound1(const vector<vector<int>> &proc
         pq.pop();
 
         if (node.level == numJobs) {
-            int makespan = calculateMakespan(node.permutation, processingTimes);
+            int makespan = calculateMakespan1(node.permutation, processingTimes);
             if (makespan < bestCost) {
                 bestCost = makespan;
                 bestSolution = node.permutation;
@@ -93,11 +93,6 @@ vector<vector<int>> BbAlgorithm::branchAndBound1(const vector<vector<int>> &proc
 
     return {bestSolution, {bestCost}};
 }
-
-
-
-
-
 
 
 

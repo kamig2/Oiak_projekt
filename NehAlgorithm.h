@@ -11,11 +11,6 @@
 #include <sys/resource.h>
 #include "Timer.h"
 
-long getMemoryUsage() {
-    struct rusage usage{};
-    getrusage(RUSAGE_SELF, &usage);
-    return usage.ru_maxrss; // in kilobytes
-}
 
 // Struktura do przechowywania zadań wraz z ich całkowitym czasem przetwarzania
 struct Task {

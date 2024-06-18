@@ -130,7 +130,7 @@ void interatingThroughtFiles() {
         } else {
             fileName = "pliki testowe//ta0" + to_string(i) + ".txt";
         }
-        for (int code = 1; code < 2; code++) {
+        for (int code = 0; code < 2; code++) {
             for (int algorithmType = 1; algorithmType < 2; algorithmType++) {//wywołanie testów tylko dla neh
                 test(10,code,algorithmType,fileName, i);
 
@@ -151,11 +151,8 @@ void interatingThroughtBigFiles() {
         for (int code = 0; code < 2; code++) {
             for (int algorithmType = 1; algorithmType < 2; algorithmType++) {//wywołanie testów tylko dla neh
                 test(10,code,algorithmType,fileName, i);
-
             }
         }
-
-
     }
 }
 #endif //OIAK_PROJEKT_TEST_H
